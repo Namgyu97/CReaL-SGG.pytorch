@@ -1,4 +1,4 @@
-# CReaL: Complex Modeling with Amplitude–Phase Decomposition for Scene Graph Generation
+# Complex-Valued Relational Embeddings with Amplitude–Phase Decomposition for Scene Graph Generation
 
 
 ## Overview
@@ -44,5 +44,11 @@ The code is implemented based on [Scene-Graph-Benchmark.pytorch](https://github.
 ## Citation
 If you use this work, please cite:
 ```
-TBD.
+@article{jung2026creal,
+  author  = {Jung, NamGyu and Choi, Chang},
+  title   = {Complex-Valued Relational Embeddings with Amplitude--Phase Decomposition for Scene Graph Generation},
+  journal = {IEEE Transactions on Neural Networks and Learning Systems},
+  year    = {2026},
+  doi     = {10.1109/TNNLS.2026.3743378}
+}
 ```
