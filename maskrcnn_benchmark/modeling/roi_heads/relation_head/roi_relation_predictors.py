@@ -133,8 +133,6 @@ class CReaL(nn.Module):
             nn.Dropout(self.dropout_rate), nn.Linear(self.mlp_dim * 2, self.mlp_dim)
         )
 
-        self.uncertainty_fc = nn.Linear(self.num_rel_cls * 2, self.num_rel_cls)
-        
         self.out_obj = make_fc(self.hidden_dim, self.num_obj_classes)
         self.lin_obj_cyx = make_fc(self.obj_dim + self.embed_dim + 128, self.hidden_dim)
         
@@ -276,6 +274,14 @@ class CReaL(nn.Module):
             dist_loss = torch.max(torch.zeros(51).cuda(), -topK_proto_dis + gamma).mean()
             add_losses.update({"phs_dist_loss": dist_loss})
 
+            # --- Relation labels (shared by both triplet losses, background excluded) ---
+            new_rel_pair_idxs = [entity_pred[pair_idx] for pair_idx, entity_pred in zip(rel_pair_idxs, entity_preds)]
+            rel_pairs = torch.cat(new_rel_pair_idxs)
+            rel_labels_cat = torch.cat(rel_labels)
+            
+            unique_labels = torch.unique(rel_labels_cat)
+            unique_labels = unique_labels[unique_labels != 0]
+
             # --- Prototype Clustering for amplitude branch ---
             margin = 0.10
             triplet_pred_pairs = []
@@ -301,12 +307,6 @@ class CReaL(nn.Module):
             margin = 0.10
             triplet_rel_pairs = []
             
-            new_rel_pair_idxs = [entity_pred[pair_idx] for pair_idx, entity_pred in zip(rel_pair_idxs, entity_preds)]
-            rel_pairs = torch.cat(new_rel_pair_idxs)
-            rel_labels_cat = torch.cat(rel_labels)
-            
-            unique_labels = torch.unique(rel_labels_cat)
-            unique_labels = unique_labels[unique_labels != 0]
             for label in unique_labels:
                 same_rel_pairs = rel_pairs[rel_labels_cat == label]
                 anchor_reps = rel_phs_norm[rel_labels_cat == label]
