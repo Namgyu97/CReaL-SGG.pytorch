@@ -5,7 +5,7 @@
 ![main](https://github.com/user-attachments/assets/20143e7d-b51d-4b4e-8ede-4659fb9c09f6)
 
 ## Abstract
-Effectively modeling the subtle interplay of relational cues within compressed relational representations remains a challenge in Scene Graph Generation(SGG). Existing methods predominantly rely on real-valued embeddings that compress all related information into a single vector, thereby introducing inherent limitations that obscure the fine-grained distinctions essential for robust relational reasoning. To overcome these limitations, we propose CReaL, a novel complex-valued embedding framework that preserves the core information provided by real-valued embeddings while explicitly decomposing it into complementary amplitude and phase components. In our model, the amplitude branch quantifies the strength and prominence of visual features, whereas the phase branch encodes directional information by capturing geometric alignment and angular relationships between objects. In addition, We adopt two distinct training strategies: i) the amplitude branch is optimized to suppress inter-class similarity and reinforce visual strength, and ii) the phase branch is tuning to capture subtle differences among relation labels. Consequently, our approach achieves more precise and reliable inference of inter-object relationships by balancing the complementary contributions of the two branches. Experiments on the VG-150 and OI-V6 datasets show that CReaL outperforms state-of-the-art methods, particularly achieving up to a 6.7\% improvement in the PredCls task. Furthermore, visual analysis of the embedding space reveals that the amplitude and phase components naturally cluster into semantically meaningful groups, highlighting both the robustness and interpretability of our approach.
+Learning compact and discriminative representations of object relations is central to structured visual reasoning. In scene graph generation, these relations must be inferred from ambiguous visual cues under a heavy class imbalance; yet most methods encode a relation as a single real-valued vector that entangles interaction strength with a discriminative orientation, so frequent predicates overwrite the distinctions among rare ones. We propose CReaL, which fuses the subject–object pair with its context through complex multiplication, letting the context scale the magnitude and shift the phase of the relation. The result is split into an amplitude branch trained for interaction strength and a phase branch for the angular structure that discriminates similar relations, with branch-specific objectives that keep the two disentangled. A dynamic gating mechanism then fuses them with per-class weights computed from both branches, and the framework stays compatible with standard real-valued pipelines. On Visual Genome 150 (VG-150), CReaL improves mR@100 across predicate classification (PredCls), scene graph classification (SGCls), and scene graph detection (SGDet) over state-of-the-art methods, including a 5.9% gain in PredCls over the strongest knowledge-graph-based baseline despite using no external knowledge graph, and it attains the best overall score on Open Images v6 (OI-V6). Visualization and clustering analyses show that the amplitude and phase form complementary structures whose gated combination sharpens decision boundaries, indicating that explicit relational decomposition is an effective foundation for fine-grained relational understanding.
 
 ---
 
@@ -13,7 +13,7 @@ Effectively modeling the subtle interplay of relational cues within compressed r
 Check [INSTALL.md](./INSTALL.md) for installation instructions.
 
 ## Dataset
-Check [DATASET.md](./DATASET.md) for instructions of dataset preprocessing.
+Check [DATASET.md](./DATASET.md) for instructions on dataset preprocessing.
 
 ## Train
 ```
@@ -36,7 +36,7 @@ python3 \
 ```
 
 ## Device
-All our experiments are conducted on one NVIDIA GeForce RTX 4090, if you wanna run it on your own device, make sure to follow distributed training instructions in [Scene-Graph-Benchmark.pytorch](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch).
+All our experiments are conducted on one NVIDIA GeForce RTX 4090. If you want to run it on your own device, make sure to follow distributed training instructions in [Scene-Graph-Benchmark.pytorch](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch).
 
 ## Acknowledgement
 The code is implemented based on [Scene-Graph-Benchmark.pytorch](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch).
