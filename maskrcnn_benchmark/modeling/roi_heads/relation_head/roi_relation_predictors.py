@@ -250,7 +250,7 @@ class CReaL(nn.Module):
         rel_phase_logits = rel_phs_norm @ pred_phs_norm.t() * self.logit_scale_phs.exp()
 
         gate = torch.sigmoid(
-            self.aaa_fc(torch.cat([rel_amp_logits, rel_phase_logits], dim=-1))
+            self.uncertainty_fc(torch.cat([rel_amp_logits, rel_phase_logits], dim=-1))
         )
         rel_dists = gate * rel_amp_logits + (1 - gate) * rel_phase_logits
         
@@ -329,7 +329,7 @@ class CReaL(nn.Module):
         entity_dists = entity_dists.split(num_objs, dim=0)
         rel_dists = rel_dists.split(num_rels, dim=0)
 
-        return entity_dists, rel_dists, add_losses
+        return entity_dists, rel_dists, add_losses, {}
         
     def refine_object_labels(self, roi_features, proposals):
         if self.mode == 'predcls':
